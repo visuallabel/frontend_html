@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>D2I Twitter "Jazz"</title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />	<!-- http://www.viaboxxsystems.de/html-fullscreen-apps-for-the-ipad -->
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" /> <!-- http://www.viaboxxsystems.de/html-fullscreen-apps-for-the-ipad -->
+		<style type="text/css">
+/* ELEMENTS */
+/*This is iOS specific selector for Safari/iPad. This will add padding of 20px to body*/
+@media screen and (device-width: 1024px){
+	html{
+		padding-top: 20px;
+		width: 1024px !important;
+		height: 748px !important;
+	}
+}
+@media screen and (device-width: 768px){
+	html{
+		padding-top: 20px;
+		width: 768px !important;
+		height: 1004px !important;
+	}
+}
+html {
+	height: 100%;
+	width: 100%;
+}
+body{
+	/*
+	w3.org validator about font-family: You are encouraged to offer a generic family as a last alternative
+	font-family: "Arial Rounded MT Bold";
+	*/
+	font-family: 'Droid-sans', sans-serif;
+	font-size: 18px;
+	margin: 0;
+    padding: 0;
+	background: #242424;
+	/*font color in the largest part of the page*/
+	color: #ffffff;
+	height: 100%;
+	width: 100%;
+	overflow-y: auto;
+}
+ol {
+	margin: 0px;
+}
+ul {
+	display: block;
+	padding: 0px;
+	margin: 0px;
+}
+li{
+	border-radius: 15px;
+}
+li:last-child{
+	background-image: none;
+}
+.highlighted{
+	background-color: rgba(0, 117, 161, 0.7);/*#0075a1;*/
+}
+a{
+	color: #0075a1;
+}
+button{
+	font-size: 20px;
+	background: none;
+	border: none;
+	color: #ffffff;
+	min-width: 40px;
+	min-height: 10px;
+	border-radius: 10px;
+	padding: 10px;
+}
+g.node{
+	cursor: pointer;
+}
+/* IDs */
+#tags-div{
+	height: 100%;
+}
+#tags-svg{
+	font-size: 18px;
+	width: 80%;
+	height: 95%;
+	margin-left: 10%;
+	margin-right: 10%;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+.no-select, #example-tags li{
+	/* http://stackoverflow.com/questions/826782/css-rule-to-disable-text-selection-highlighting */
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+#btn-commit{
+	position: fixed;
+	left: 40%;
+	right: 40%;
+	bottom: 15px;
+}
+#div-sync-again{
+	text-align: center;
+	position: fixed;
+	left: 40%;
+	right: 40%;
+	top: 25%;
+}
+#overlay {
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	height: 100%;
+	width: 100%;
+	overflow-y: hidden; /*hides the vertical scrollbar*/
+	background-color: rgba(0,0,0,0.5);
+	text-align: center;
+	z-index: 100;
+}
+#overlay-message{
+	background-color: rgba(0, 117, 161, 0.6) !important;/*#0075a1;*/
+	border-radius: 20px;
+	padding: 20px 60px;
+	text-align: center;
+	display: inline-block;
+	margin-top: 200px;
+}
+
+/* CLASSES */
+.hidden{
+	display: none;
+}
+#login-div{
+	width: 100%;
+	text-align: justify;
+	font-size: 16px;
+}
+#login-div > *{
+	width: 90%;
+	margin-top: 1em;
+	margin-left: 5%;
+	margin-right: 5%;
+}
+.ngram{
+	background-color: dimgray;
+	fill: dimgray !important;
+}
+.accepted{
+	background-color: green;
+	fill: green !important;
+	text-decoration: underline;
+}
+.rejected{
+	background-color: red;
+	fill: red !important;
+	text-decoration: line-through;
+}
+.tag{
+	display: inline-block;
+	margin: 5px;
+	padding: 15px 10px;
+	cursor: pointer;
+}
+li .tag.unigram{
+	background-color: #3182bd;
+}
+li .tag.ngram{
+	background-color: #6baed6;
+}
+.header{
+	font-size: 1.2em;
+	font-weight: bold;
+}
+		</style>
+		<script src="/ca_login/js/facebook_auth.js"></script>
+		<script src="d3/d3.min.js" charset="utf-8"></script>
+		<script src="twj.js"></script>
+	</head>
+	<body onload="onBodyLoad()" ontouchstart="">
+		<div id="login-div" class="">
+			&nbsp;
+			<div id="introduction">
+				<div class="header">Welcome to D2I-Jazz Twitter Tag Extractor Service</div>
+				<div>The D2I-Jazz Twitter Tag Extractor Service can read Tweets from your timeline and see who you follow, and generates tags of your interest and hobbies. The extracted tags are the only data which are stored about you.</div>
+				<div>This service uses Facebook for access control, and adds two Facebook app "D2I-VisualLabel" to your account. Twitter application "d2i-tweet" is used to retrieve the aforementioned data from your Twitter account.</div>
+			</div>
+			<div id="instructions">
+				<div class="header">Instructions</div>
+				<ol>
+					<li>Please sign in with your Facebook account (your account credentials will NOT be stored on our server)</li>
+					<li>Permissions will be requested first from Facebook, and then from Twitter</li>
+					<li>A Tag-set of 30 words will appear</li>
+					<li>Please give your opinion on how useful each word is as a potential label for your hobby and interests
+						<ul id="example-tags">
+							<li>A tag may have one of the following states:</li>
+							<li class="unigram tag">neutral</li><li class="ngram tag">neutral n-gram</li><li class="accepted tag">accept</li><li class="rejected tag">reject</li>
+							<li>Click a tag once to accept it, twice to reject it, or leave it untouched for neutral state</li>
+						</ul>
+					</li>
+				</ol>
+				<div>If you have any questions or there are problems with extracting your tags, email us: <a href="mailto:cose-pori@tut.fi">cose-pori@tut.fi</a></div>
+			</div>
+			<div id="login-form"></div>
+			<div id="thankyou-div" class="hidden">
+				<div class="header">Thank You for Your Feedback</div>
+				<div>Your feedback is now stored in our service. The permissions you gave to D2I-VisualLabel and d2i-tweet applications can now be removed.</div>
+			</div>
+		</div>
+		<div id="overlay" class="hidden">
+			<div id="overlay-message"><p>Processing...</p><p>Please wait</p></div>
+		</div>
+		<div id="tags-div" class="hidden">
+			<svg id="tags-svg"></svg>
+			<div id="div-sync-again" class="hidden"><div>No tags? Try again.</div><button id="btn-sync-again" class="highlighted" onclick="syncAgain();">Synchronize Again</button></div>
+			<button id="btn-commit" class="highlighted hidden" onclick="setRank();">Submit Changes</button>
+		</div>
+	</body>
+</html>

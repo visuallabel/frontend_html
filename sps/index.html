@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>CABrowser</title>
+		<meta charset="UTF-8">		
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />	<!-- http://www.viaboxxsystems.de/html-fullscreen-apps-for-the-ipad -->
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" /> <!-- http://www.viaboxxsystems.de/html-fullscreen-apps-for-the-ipad -->
+		<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Sans"/> <!--https://developers.google.com/webfonts/-->
+		<link rel="stylesheet" href="styles/libs/jquery-ui.css" />
+		<link rel="stylesheet" href="styles/libs/jquery.autocomplete.css" />
+		<link rel="stylesheet" href="styles/transitions.css" type="text/css" />
+		<link rel="stylesheet" href="styles/main.css" type="text/css" />
+		<link rel="stylesheet" href="styles/controls.css" type="text/css" />
+		<script src="js/libs/jquery-1.8.3.min.js" ></script>
+		<script src="js/libs/jquery-ui-1.9.2.min.js"></script>
+		<script src="js/libs/jquery.autocomplete.min.js"></script>
+		<script src="js/libs/jquery.ui.touch-punch.min.js"></script> <!-- for fixing the touch jquery ui touch issues on iOS, must be included after jquery-ui: http://touchpunch.furf.com/ -->
+		<script src="js/libs/modernizr.touch.only.js" ></script>
+		<script src="js/contentAnalysis.js"></script>	
+		<script src="js/touchHandler.js"></script>
+		<script src="js/editHandler.js"></script>
+		<script src="js/ui_creator.js"></script>
+		<script src="js/ui_buttons.js"></script>
+		<script src="js/browseHistory.js"></script>
+		<script src="js/main.js"></script>
+	</head>
+	<body onload="onBodyLoad();" ontouchstart=""> <!-- fixes ios/mobile safari pseudo class :active issues, http://stackoverflow.com/questions/3885018/active-pseudo-class-doesnt-work-in-mobile-safari -->
+		
+		<!-- login prompt -->
+		<div id="user-details-dialog-form" title="Welcome to Smart Photo Service" class="hidden">
+		  <form id="login-form">
+		   <div class="hint">Please Login to view your photos:</div>
+		   <fieldset>
+		    <input type="text" name="username" id="username" placeholder="Username" onfocus="scrollPageToTop()" class="text ui-widget-content ui-corner-all"/>
+		    <input type="password" name="password" id="password" placeholder="Password" value="" onfocus="scrollPageToTop()" class="text ui-widget-content ui-corner-all"/>
+		   </fieldset>
+		  </form>
+		  <div id="user-details-dialog-text" class="error-text hidden"></div>
+		</div>
+		
+		<!-- waiting dialog -->
+		<div id="wait-dialog" title="" class="hidden">
+			<div>
+				<div class="loader-blueish">
+					<span id="wait-dialog-text"></span>
+				</div>
+			</div>
+		</div>
+		
+		<!-- error dialog -->
+		<div id="error-dialog" title="" class="hidden">
+		  <div id="error-dialog-text"></div>
+		</div>
+		
+		<!-- overlay -->
+		<div id="overlay">
+			<div class="toolbar-mainview toolbar-no-back transitions-fast" id="toolbar">
+				<!-- divs are for grouping the buttons and stuff -->
+				<div class="back vertical-spacer">
+					<button id="button-back" type="button" onclick="uibuttons.back()" class="button transitions-fast">Back</button>
+					<button id="button-cancel" type="button" onclick="uibuttons.back()" class="button transitions-fast">Cancel</button>
+				</div>
+				<div class="details vertical-spacer">
+					<button id="button-details" type="button" onclick="uibuttons.details()" class="button"></button>
+				</div>
+				<div class="search vertical-spacer">
+					<button id="button-search" type="button" onclick="uibuttons.search()" class="button"></button>
+				</div>
+				<div class="center vertical-spacer">
+					<span class="transitions-fast">
+						<span id="toolbar-text-numbers"></span>
+						<span id="toolbar-text-phrase"></span>
+					</span>
+				</div>
+				<div class="tools right vertical-spacer">
+					<button id="button-options" type="button" onclick="uihelper.options()" class="button">Options</button>
+					<button id="button-edit" type="button" onclick="uibuttons.edit()" class="button">Edit</button>
+					<button id="button-done" type="button" onclick="editHandler.saveModifications()" class="button">Done</button>
+				</div>
+				<div class="logout right">
+					<button id="button-logout" type="button" onclick="contentAnalysis.logout()" class="button">Logout</button>
+				</div>
+			</div>
+			
+			<!-- left arrow -->
+			<div id="left-arrow">
+				<button id="button-previous" type="button" onclick="uibuttons.previous()" class="button buttonPrevious transitions-fast arrowDisabled"></button>
+			</div >
+			<!-- right arrow -->
+			<div id="right-arrow">
+				<button id="button-next" type="button" onclick="uibuttons.next()"  class="button buttonNext transitions-fast arrowDisabled"></button>
+			</div>
+			
+			<!-- content elements, content is initially visible -->
+			<div id="content"></div>
+			
+			<!-- edit elements -->
+			<div id="edit" class="hidden">
+				<div class="faces">
+					<div class="horizontal-spacer">
+						<div class="bold half-cell">People in This Photo</div>
+						<div class="hint bottom-margin">Tap <img src="images/ic_edit_remove.png" alt="'x'" class="inline-image"></img> to remove people from this photo.</div>
+					</div>
+					<div class="horizontal-spacer full-cell justify">
+						<input id="add-face-editmode" onfocus="editHandler.deselectCurrent()" type="text" placeholder="Add New Person" class="input-edit-mode"/>
+						<button id="btn-add-face" type="button" onclick="editHandler.addConfirmed(ContentAnalysis.VisualObjectType.FACE, '#add-face-editmode')" class="button addTermButton"></button>
+						<span class="justifier">&nbsp;</span>
+					</div>
+					<ul id="edit-faces" class="editFaceTerms horizontal-spacer ul-wrapper"></ul>
+					<div>
+						<div class="half-cell">Who is missing?</div>
+						<div class="hint bottom-margin">Enter name to the field above, and then draw a circle around a face in the photo to add a new person.</div>
+					</div>
+					<ul id="edit-faces-candidates" class="candidates editFaceTerms horizontal-spacer ul-wrapper"></ul>
+				</div>
+				<div class="center">
+					<canvas id="editCanvas">
+					</canvas>
+				</div>
+				<div class="keywords float-right">
+					<div class="horizontal-spacer">
+						<div class="bold half-cell">Tags in This Photo</div>
+						<div class="hint bottom-margin">Tap <img src="images/ic_edit_remove.png" alt="'x'" class="inline-image"></img> to remove tags from this photo.</div>
+					</div>
+					<div class="horizontal-spacer full-cell justify">
+						<input id="add-keyword-editmode" onfocus="editHandler.deselectCurrent()" type="text" placeholder="Add New Tag" class="input-edit-mode"/>
+						<button id="btn-add-keyword" type="button" onclick="editHandler.addConfirmed(ContentAnalysis.VisualObjectType.KEYWORD, '#add-keyword-editmode')" class="button addTermButton"></button>
+						<span class="justifier">&nbsp;</span>
+					</div>
+					<ul id="edit-keywords" class="editKeywordTerms horizontal-spacer ul-wrapper"></ul>
+					<div>
+						<div class="half-cell">Do any of these match?</div>
+						<div class="hint bottom-margin">Tap <img src="images/ic_edit_add.png" alt="'+'" class="inline-image"></img> to add suggested tags to this photo.</div>
+					</div>
+					<ul id="edit-keywords-candidates" class="candidates editKeywordTerms horizontal-spacer ul-wrapper"></ul>
+				</div>	
+			</div>
+			
+			<!-- slideshow elements -->
+			<div id="slideshow" class="hidden"></div>	
+				
+			<!-- metadata elements -->		
+			<div id="metadata" class="transparency hidden">
+				<div class="faces vertical-spacer spacer-no-padding">
+					<div class="horizontal-spacer bold full-cell">People in this photo</div>
+					<ul id="metadata-faces"></ul>
+				</div>
+				<div class="keywords float-right">
+					<div id="metadata-tag-selector" class="horizontal-spacer bold full-cell">Tags in this photo</div>
+					<ul id="metadata-keywords"></ul>
+				</div>	
+			</div>
+			
+			<!-- search elements -->
+			<div id="search" class="transparency hidden">
+				<div class="faces hide-if-empty vertical-spacer spacer-no-padding">
+					<div class="horizontal-spacer bold full-cell">
+						People in this photo
+					</div>
+					<ul id="search-faces" class="searchTerms horizontal-spacer ul-wrapper ul-wrapper-bigger"></ul>
+				</div>				
+				<div class="center">
+					<div class="title full-cell horizontal-spacer">Search Options</div>
+					<!--<div id="div-similarity-search" class="horizontal-spacer">
+						<div class="float-left typical-margin">
+							<div>Similarity Search</div>
+							<div class="hint">Search photos that look like this one.</div>
+						</div>
+						<div class="float-right">
+							<button id="button-similarity-search" type="button" onclick="uibuttons.similaritySearch()" class="button highlighted searchSimilarityButton">Search similar photos</button>
+						</div>
+					</div>-->
+					<div id="div-main-search" class="typical-margin">
+						<div>Search by People or Tags</div>
+						<div class="hint">Search all your photos containing People or Tags. Enter search terms in the field below, and hit Search.</div>
+						<div id="div-main-search-inputfield">
+							<input id="keyword-edit" type="text" placeholder="Persons, Tags..."/>
+							<button id="btn-main-search" type="button" onclick="uibuttons.objectSearch()" class="button highlighted searchButton float-right">Search</button>
+						</div>
+					</div>
+					<div id="div-tag-search" class="hide-if-empty typical-margin">
+						<div>Search by People or Tags</div>
+						<div class="hint">Select persons / tags from the side panels, or enter a new search term in the field below, and hit Search when you're ready.</div>
+						<div>
+							<div>
+								<input id="add-search-term-edit" type="text" placeholder="Name of the Person or Tag"/>
+								<button id="btn-tag-search" type="button" onclick="uibuttons.addSearchTerm()" class="button addTermButton"></button>
+							</div>
+							<div id="search-drop-target">
+								<ul id="search-terms" class="searchTerms"></ul>
+							</div>
+							<div id="divSearchButton">
+								<button type="button" onclick="uibuttons.objectSearch()" class="button highlighted searchButton float-right">Search</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="keywords hide-if-empty vertical-spacer-left spacer-no-padding float-right">
+					<div class="horizontal-spacer bold full-cell">
+						Tags in this photo
+					</div>
+					<ul id="search-keywords" class="searchTerms horizontal-spacer ul-wrapper ul-wrapper-bigger"></ul>
+				</div>		
+			</div>
+			
+			<div id="tutorial" class="hidden">
+				<button type="button" onclick="$('#tutorial').fadeOut('fast');" class="button"></button>
+			</div>
+			
+			<div id="bottom-statusbar" class="transitions-fast collapsed">
+				<div id="statusbar-content"></div>
+			</div>
+		</div>
+	</body>
+</html>

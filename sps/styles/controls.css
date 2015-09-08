@@ -1,0 +1,307 @@
+/**
+ * Copyright 2015 Tampere University of Technology, Pori Unit
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+canvas{
+	padding: 0px !important;
+}
+
+.button{
+	font-size: 20px;
+	background: none;
+	border: none;
+	color: #ffffff;
+	min-width: 40px;
+	min-height: 10px;
+	border-radius: 10px;
+}
+
+.removeButton{
+	background: url(../images/ic_edit_remove.png) no-repeat center;
+	min-width: 25px;	/* override button min-width */
+	height: 60px;
+	line-height: 60px;
+}
+.addButton{
+	background: url(../images/ic_edit_add.png) no-repeat center;
+	font-size: 18px;
+	min-width: 25px;	/* override button min-width */
+	height: 60px;
+	line-height: 60px;
+}
+
+.searchAddButton{
+	background: url(../images/ic_search_add.png) no-repeat left center;
+	font-size: 18px;
+	min-width: 25px;
+	padding-left: 30px;
+	/*height: 25px; this breaks IE11 for some reason*/
+}
+.searchRemoveButton{
+	background: url(../images/ic_search_remove.png) no-repeat right center;
+	font-size: 18px;
+	min-width: 25px;	/* override button min-width */
+	padding-right: 30px;
+	height: 25px;
+}
+
+/* left arrow */
+.buttonPrevious{
+	background: url(../images/bt_arrow_prev_default.png) no-repeat left;
+	height: 100%;
+	width: 35px;
+	min-width: 35px;
+	height: 23px;
+}
+.buttonPrevious:active{
+	background: url(../images/bt_arrow_prev_pressed.png) no-repeat left;
+}
+#left-arrow{
+	position: fixed;
+	top: 50%;
+	left: 0px;
+	z-index: 101;	/*just above the search mode, but below edit mode*/
+}
+
+/* right arrow */
+.buttonNext{
+	background: url(../images/bt_arrow_next_default.png) no-repeat left;
+	height: 100%;
+	width: 35px;
+	min-width: 35px;
+	height: 23px;
+}
+.buttonNext:active{
+	background: url(../images/bt_arrow_next_pressed.png) no-repeat left;
+}
+#right-arrow{
+	position: fixed;
+	top: 50%;
+	right: 0px;
+	z-index: 101;	/*just above the search mode, but below edit mode*/
+}
+
+/*for disabling left/right arrow*/
+.arrowDisabled {
+	opacity: 0;
+}
+
+.fill-width{
+	width: 100%;
+}
+.full-cell{
+	line-height: 60px;
+	height: 60px;
+}
+.half-cell{
+	line-height: 30px;
+	height: 30px;
+}
+/* for buttons */
+.column-left{
+	text-align: left;
+	background-position: right;
+	padding-right: 25px;
+	padding-left: 0px;
+}
+.column-right{
+	text-align: right;
+	background-position: left;
+	padding-right: 0px;
+	padding-left: 25px;
+}
+
+#divSearchButton{
+	position: absolute;
+	bottom: 20px;
+	right: 0px;
+}
+.searchButton{
+	height: 40px;
+	width: 125px;
+}
+.searchSimilarityButton{
+	background: url(../images/ic_bt_search.png) no-repeat left;
+	padding-left: 35px;
+	height: 50px;
+	width: 250px;
+}
+
+.addTermButton{
+	background: url(../images/ic_add.png) no-repeat center;
+	min-width: 25px;
+	width: 25px;
+	height: 19px;
+}
+
+.selected{
+	background: #0075a1;
+}
+
+.ui-sortable-helper{
+	cursor: move;
+}
+
+.highlighted{
+	background-color: rgba(0, 117, 161, 0.7);/*#0075a1;*/
+}
+
+.highlighted-outline{
+	outline: #0075a1;
+	outline-style: solid;
+	outline-width: 4px;
+}
+
+/* details button */
+.button#button-details{
+	height: 30px;
+	background: url(../images/ic_expand_default.png) no-repeat center;
+}
+.button#button-details:active{
+	background: url(../images/ic_expand_highlighted.png) no-repeat center;
+}
+#toolbar.toolbar-metadata .button#button-details{
+	background: url(../images/ic_collapse_default.png) no-repeat center;
+}
+#toolbar.toolbar-metadata .button#button-details:active{
+	background: url(../images/ic_collapse_highlighted.png) no-repeat center;
+}
+
+/* search button */
+.button#button-search{
+	background: url(../images/ic_search_open_default.png) no-repeat center;
+	height: 30px;
+}
+.button#button-search:active{
+	background: url(../images/ic_search_open_highlighted.png) no-repeat center;
+}
+#toolbar.toolbar-search .button#button-search{
+	background: url(../images/ic_search_close_default.png) no-repeat center;
+}
+#toolbar.toolbar-search .button#button-search:active{
+	background: url(../images/ic_search_close_highlighted.png) no-repeat center;
+}
+
+/*
+ * Toolbar components 
+ */
+/*Dim back button if 'toolbar-no-back' class has been set*/
+#toolbar.toolbar-no-back #button-back {
+	opacity: 0.5;
+}
+/*Hide back button if "toolbar-editmode" class has been set */
+#toolbar.toolbar-editmode #button-back {
+	display: none;
+}
+/*Show detail button only when 'toolbar-slideshow' class has been set. */
+#toolbar:not(.toolbar-slideshow) .details {
+	display: none !important;
+}
+/*Hide details button if 'toolbar-editmode' class has been set.*/
+#toolbar.toolbar-editmode .details {
+	display: none;
+}
+/*show options button only when 'toolbar-mainview' class has been set
+  TODO: options button is hidden for the time being (it'd be empty anyways)*/
+#toolbar/*:not(.toolbar-mainview)*/ #button-options{
+	display: none;
+}
+/*Show edit button only when one of the classes have been set, 
+  Hide edit button explicitly if 'toolbar-search' class has been set,
+  Hide edit button if 'toolbar-editmode' class has been set*/
+#toolbar:not(.toolbar-slideshow):not(.toolbar-metadata) #button-edit,
+#toolbar.toolbar-search #button-edit,
+#toolbar.toolbar-editmode #button-edit {
+	display: none;
+}
+/*show done&cancel button only when 'toolbar-editmode' class been set*/
+#toolbar:not(.toolbar-editmode) #button-done,
+#toolbar:not(.toolbar-editmode) #button-cancel {
+	display: none;
+}
+/*hide search button if 'toolbar-editmode' class has been set*/
+#toolbar.toolbar-editmode .search {
+	display: none;
+}
+#toolbar.toolbar-editmode .logout{
+	display: none;
+}
+#toolbar.toolbar-mainview .tools,
+#toolbar.toolbar-search .tools{
+	display: none;
+}
+#toolbar.toolbar-editmode .tools{
+	background: none; /* a tiny fix */
+}
+
+#toolbar div.center{
+	padding-left: 0px;
+	width: 100%;
+	text-align: center;
+}
+#toolbar.collapsed div.center > span{
+	top: -50px;
+}
+#toolbar div.center > span{
+	position: fixed;
+	top: 0px;
+	left: 20%;
+	right: 20%;
+	text-overflow: ellipsis;
+	overflow: hidden;
+}
+#toolbar div.right{
+	padding-right: 15px;
+}
+/*
+ * End of Toolbar components
+ */
+
+#keyword-edit{
+	border: none;
+	padding: 10px;
+	width: 60%;
+}
+
+#add-search-term-edit{
+	width: 70%;
+	float: left;
+}
+.input-edit-mode{
+	font-size: 18px;
+	width: 65%;
+}
+
+.thumbsUp{
+	padding: 10px 20px;
+	min-width: 48px;
+	min-height: 48px;
+	float: right;
+	background: url(../images/bt_rate_plus_unselected.png) no-repeat center;
+}
+.thumbsUp-selected{
+	background: url(../images/bt_rate_plus_selected.png) no-repeat center;
+}
+.thumbsDown{
+	padding: 10px 20px;
+	min-width: 48px;
+	min-height: 48px;
+	float: right;
+	background: url(../images/bt_rate_minus_unselected.png) no-repeat center;
+}
+.thumbsDown-selected{
+	background: url(../images/bt_rate_minus_selected.png) no-repeat center;
+
+}

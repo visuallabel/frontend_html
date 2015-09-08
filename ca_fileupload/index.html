@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>CAFrontEnd File Upload</title>
+	<link rel="stylesheet" href="main.css" type="text/css" />
+	<script src="jquery-2.1.4.min.js"></script>
+	<script src="/ca_login/js/facebook_auth.js"></script>
+	<script src="/ca_login/js/google_auth.js"></script>
+	<script src="main.js"></script>
+	<script src="search.js"></script>
+</head>
+<body onload="onBodyLoad()">
+	<div id="login-div" class="hidden">
+		<div id="login-form"></div>
+	</div>
+	<div id="content-div" class="hidden">&nbsp;
+		<div id="holder">Drop your media here</div>
+		<p id="upload" class="hidden"><label>Drag & drop not supported, but you can still upload via this input field:<br><input type="file"></label></p>
+		<p id="filereader">File API & FileReader API not supported</p>
+		<p id="formdata">XHR2's FormData is not supported</p>
+		<p id="progress">XHR2's upload progress isn't supported</p>
+		<div id="progress-div" class="hidden">
+			<div>Files uploaded <span id="files-uploaded">0</span> of <span id="files-to-upload">0</span></div>
+			<div>Upload progress: <progress id="uploadprogress" min="0" max="100" value="0">0</progress></div>
+		</div>
+		<div class="title"><hr>Uploaded media</div>
+		<div id="files-div"></div>
+		<div><button onclick="analyzeSelected()">Analyze</button></div>
+		<div class="title"><hr>Analyzed photos</div>
+		<div id="photos-div"></div>
+		<div class="title"><hr>Analyzed videos</div>
+		<div id="videos-div"></div>
+		<div id="media-tip" class="tooltip hidden"></div>
+	</div>
+	<div id="search-results-div" class="hidden">
+</body>
+</html>

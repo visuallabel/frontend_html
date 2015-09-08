@@ -1,0 +1,13 @@
+.btn_g_plus{
+	border: none;
+	background: none;
+	background-image: url(../images/Red-signin_Long_base_44dp.png);
+	width: 246px;
+	height: 54px;
+}
+.btn_g_plus:hover{
+	background-image: url(../images/Red-signin_Long_hover_44dp.png);
+}
+.btn_g_plus:active{
+	background-image: url(../images/Red-signin_Long_press_44dp.png);
+}

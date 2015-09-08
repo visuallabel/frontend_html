@@ -1,0 +1,657 @@
+/**
+ * Copyright 2015 Tampere University of Technology, Pori Unit
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+html {
+	height: 100%;
+	width: 100%;
+	/* reduce the chances for user to accidentally highlighting all of the page's elements
+	 * http://stackoverflow.com/questions/826782/css-rule-to-disable-text-selection-highlighting
+	 */
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+body{
+	/*
+	w3.org validator about font-family: You are encouraged to offer a generic family as a last alternative
+	font-family: "Arial Rounded MT Bold";
+	*/
+	font-family: 'Droid-sans', sans-serif;
+	font-size: 18px;
+	margin: 0;
+    padding: 0;
+	background: #242424;
+	/*font color in the largest part of the page*/
+	color: #ffffff;
+	height: 100%;
+	width: 100%;
+	/*uncomment this to get rid of scroll bars, but, it will also hide all images that doesn't fit in one screen...*/
+	/*overflow: hidden;*/
+}
+input{
+	font-family: 'Droid-sans', sans-serif !important;
+	font-size: 14px;
+	text-overflow: ellipsis;
+	border: none;
+	border-radius: 5px;
+	padding: 5px 10px;
+}
+
+#overlay {
+	height: 100%;
+	width: 100%;
+	overflow-y: hidden; /*hides the vertical scrollbar*/
+}
+
+.loader{
+	/* http://ajaxload.info */
+	background: url(../images/ajax-loader.gif) no-repeat center;
+}
+
+.loader-blueish{
+	/* http://ajaxload.info */
+	background: url(../images/ajax-loader_2.gif) no-repeat left;
+	height: 80px;
+	line-height: 80px;
+	display: inline-block;
+	text-align: right;
+	padding-left: 48px;
+}
+
+/* Wait dialog definitions */
+#wait-dialog{
+	text-align: center;
+	font-weight: bold;
+	min-height: initial !important;	/*it is hard to understand to KEEP the same size all the time*/
+	color: #ffffff !important;
+}
+.wait-dialog{
+	background-color: rgba(0, 117, 161, 0.6) !important;/*#0075a1;*/
+	padding: 0px;
+}
+.wait-dialog .ui-dialog-titlebar{
+	display: none;
+}
+/* End wait dialog definitions */
+
+/* Error dialog */
+#error-dialog{
+	color: #ffffff;
+	font-size: 16px;
+}
+#error-dialog > div{
+	margin-bottom: 1em;
+}
+.error-dialog{
+	background-color: rgba(39,39,39,1) !important;/*#272727*/
+}
+.error-dialog .ui-dialog-titlebar{
+	color: #dd6b32;
+}
+.error-dialog .ui-dialog-buttonpane{
+	text-align: center;
+	padding: 5px;
+	margin: 0px;
+	border: 0px;
+	background: url(../images/bg_horizontal_divider.png) repeat-x top;
+}
+.error-dialog .ui-dialog-buttonpane .ui-dialog-buttonset{
+	float: initial;
+}
+.error-dialog .ui-dialog-buttonpane button{
+	background: none;
+	color: #ffffff;
+	margin: 0px;
+	width: 100%;
+	outline: none;	/* removes focused border */
+}
+/* End Error dialog definitions */
+
+/* Login dialog definitions */
+#user-details-dialog-form{
+	background: url(../images/bg_icon_login.png) no-repeat left top;
+	overflow: hidden;
+}
+#user-details-dialog-text{
+	position: absolute;
+	top: 225px;
+	right: 0px;
+	width: 90%;
+	text-align: right;
+	padding-right: 1em;
+}
+#login-form{
+	width: 50%;
+	float: right;
+}
+.login-dialog{
+	padding: 0px;
+}
+.login-dialog .ui-dialog-buttonpane button{
+	background: none;
+	background-color: rgba(0, 117, 161, 1);/*#0075a1;*/
+	color: #ffffff;
+	border: none;
+	margin: 0px;
+}
+.login-dialog .ui-dialog-titlebar{
+	color: #ffffff !important;
+	font-size: 36px;
+}
+.login-dialog .ui-dialog-buttonpane{
+	position: absolute;
+	right: -20px; /* must be done, as padding of input field increases their width :( */
+	top: 199px;	/* exactly :3 */
+	border: none;
+	background: none;
+}
+/* end Login dialog */
+
+.ui-widget{
+	border: none !important;
+	font-family: 'Droid-sans', sans-serif;
+}
+.ui-widget input{
+	background: #ffffff !important;
+	color: #000000;
+	margin-top: 16px;
+	margin-bottom: 0px;
+	width: 100%;
+}
+.ui-widget-header{
+	background: transparent !important;
+	border: none;
+}
+.ui-widget-content{
+	background: none;
+}
+.ui-widget-overlay{
+	background: none;
+	background-color: rgba(0,0,0,1) !important;
+}
+.ui-dialog-title{
+	overflow: visible !important;
+	width: 100% !important;
+	text-align: center;
+}
+.ui-dialog-titlebar{
+	padding: 0px !important;
+}
+.ui-dialog-titlebar-close{
+	display: none;
+}
+.ui-icon{
+	background-image: none !important;
+}
+
+/* jquery.autocomplete stuff*/
+.acResults{
+	background: rgba(255,255,255,1);
+	z-index: 2000;
+	color: black;
+}
+.acResults ul li{
+	padding: 4px 5px;
+}
+
+fieldset{
+	border: none;
+	padding: 0px;
+}
+
+#toolbar {
+	width: 100%;
+	overflow: hidden;
+	background-image: url(../images/bg_horizontal_divider.png);
+	background-repeat: repeat-x;
+	background-position: bottom;
+	z-index: 1;
+}
+
+#toolbar div{
+	padding-left: 15px;
+	height: 100%;
+	display: table-cell;
+	white-space: nowrap;	/*prevent stuff from wrapping beyond the first line */
+}
+
+/*This is iOS specific selector for Safari/iPad. This will add padding of 20px to toolbar and overlays*/
+@media screen and (device-width: 1024px), screen and (device-width: 768px){
+	#toolbar{
+		padding-top: 20px;
+		background-image: url(../images/bg_horizontal_divider.png), url(../images/bg_horizontal_divider.png);
+		background-repeat: repeat-x, repeat-x;
+		background-position: 0px 19px, bottom;
+	}
+	#content, #edit, #metadata, #search{
+		top: 70px !important; /*20px+50px*/
+	}
+}
+
+.toolbar-mainview {
+	top: 0px;
+	height: 50px;
+	line-height: 50px;
+	background-color: rgb(0,0,0);
+	position: fixed;
+}
+
+.toolbar-slideshow {
+	top: 0px;
+	height: 50px;
+	/*height approx. 50px*/
+	line-height: 50px;
+	background-color: rgba(0,0,0,0.7); /*need to use rgba on bg-color rather than setting the whole element's opacity*/
+	position: fixed;
+}
+
+/*force the toolbar in the slideshow view to stay open when hovered*/
+.toolbar-slideshow:hover{
+	height: 50px;
+}
+
+/*these is a spacer element after every div*/
+.vertical-spacer{
+	background: url(../images/bg_vertical_divider.png) repeat-y right;
+	padding-right: 15px;
+}
+
+.vertical-spacer-left{
+	background: url(../images/bg_vertical_divider.png) repeat-y left;
+	padding-left: 15px;
+}
+
+.horizontal-spacer{
+	background: url(../images/bg_horizontal_divider.png) repeat-x bottom;
+}
+
+.spacer-no-padding{
+	padding: 0px;
+}
+/*end of spacers*/
+
+#overlay #bottom-statusbar{
+	width: 100%;
+	height: 18%;
+	background-color: rgba(0,0,0,0.5);
+	position: fixed;
+	bottom: 0px;
+	text-align: center;
+	display: table;
+}
+#statusbar-content{
+	height: 100%;
+	display: table-cell;
+	vertical-align: middle;
+}
+
+#overlay #metadata{
+	width:100%; 
+    min-height: 50%;
+	height: 50%;
+    background-color: rgba(0,0,0,0.7); /*need to use rgba on bg-color rather than setting the whole element's opacity*/
+    position:fixed;
+    top:50px;  
+    left:0px;
+    z-index: 100;
+    padding: 0px;
+	overflow: hidden; /*crude hack to prevent odd stuff*/
+} 
+
+#overlay #search{
+	width:100%; 
+    min-height: 50%;
+	height: 50%;
+    background-color: rgba(0,0,0,0.7); /*need to use rgba on bg-color rather than setting the whole element's opacity*/ 
+    position:fixed;
+    top:50px;  
+    left:0px;
+    z-index: 100;
+    padding: 0px;
+	overflow: hidden; /*crude hack to prevent odd stuff*/
+} 
+
+#content {
+	position: fixed;
+	top: 50px;
+	bottom: 0px;
+	min-width: 100%;
+	text-align: center;
+}
+
+#edit {
+	width:100%;
+	height: 100%;
+    background-color: rgba(0,0,0,0.7); /*need to use rgba on bg-color rather than setting the whole element's opacity*/ 
+    position:fixed;
+    top:50px;  
+    left:0px;
+    z-index: 1000;
+    padding: 0px;
+}
+
+#slideshow {
+	min-width: 100%;
+	min-height: 100%;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: contain;
+}
+
+#tutorial{
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0,0,0,0.5);
+	background-image: url(../images/D2I_Tutorial_Overlay_2.png);
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	z-index: 1000;
+}
+#tutorial button{
+	position: fixed;
+	top: 0px;
+	bottom: 0px;
+	left: 0px;
+	right: 0px;
+	width: 100%;
+	height: 100%;
+}
+
+.long-press-tip{
+	background: url(../images/img_long_press.png) left no-repeat;
+	padding-left: 60px;
+	height: 80px;
+	line-height: 80px;
+	display: inline-block;
+}
+
+.browseItem {
+	display: inline-block;	/* this was the correct sorcery for the column-view */
+	overflow: hidden;
+	margin-right: 10px;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+.browseItem .tooltip{
+	border-radius:4px;
+	display: none;
+	z-index:10;
+	padding:14px 20px;
+	margin-top: 1em;
+	margin-left: 2em;
+	margin-right: 2em;
+	line-height: 1em;
+	border:1px solid #000;
+	background: rgba(39,39,39,0.7);
+}
+
+.browseItem:hover .tooltip{
+	display: block;
+	position: relative;
+}
+
+.preview-img{
+	position: relative;
+	overflow: hidden;
+}
+
+.hint{
+	color: #dbdbdb;
+	font-size: 0.75em;
+}
+
+.collapsed{
+	height: 0px !important;
+}
+
+.title{
+	font-size: 1.25em;
+	font-weight: bold;
+	text-align: center;
+}
+
+.bold{
+	font-weight: bold;
+}
+
+ul {
+	display: block;
+	list-style-type: none; 
+	padding: 0px;
+	margin: 0px;
+}
+ul:empty{
+	min-height: 1px !important; /*setting this to 0px would break on iPad/iOS*/
+	height: 1px;
+	background: none;
+}
+
+.ul-wrapper{
+	max-height: 240px;	/* about four cells */
+	overflow-y: auto;
+	overflow-x: hidden;
+	-webkit-overflow-scrolling: touch;
+}
+.ul-wrapper-bigger{
+	max-height: 300px; /* about five cells */
+}
+
+#metadata-keywords li, #metadata-faces li, #search-keywords li, #search-faces li, .editFaceTerms li, .editKeywordTerms li{
+	min-height: 60px;
+	line-height: 60px;
+}
+
+#metadata-keywords li{
+	background: none;
+	display: inline-block;
+	border-radius: 1em;
+	margin: 5px;
+	min-width: 25px;
+	padding-left: 1em;
+	padding-right: 1em;
+}
+/* the following colors are taken from https://github.com/mbostock/d3/wiki/Ordinal-Scales */
+.FBJ{
+	background-color: rgba(31,119,180, 0.7) !important;
+}
+.TWJ{
+	background-color: rgba(255,127,14, 0.7) !important;
+}
+.BACKEND{
+	background-color: rgba(44,160,44, 0.7) !important;
+}
+.USER{
+	background-color: rgba(214,39,40, 0.7) !important;
+}
+.PICASA{
+	background-color: rgba(148,103,189, 0.7) !important;
+}
+.FSIO{
+	background-color: rgba(140,86,75, 0.7) !important;
+}
+.URL{
+	background-color: rgba(227,119,194, 0.7) !important;
+}
+/* additional category colors...
+7f7f7f #7f7f7f	rgb(127,127,127)
+bcbd22 #bcbd22	rgb(188,189,34)
+17becf #17becf	rgb(23,190,207)
+*/
+/* hide stuff if certain class does exist */
+#metadata-keywords.NO_FBJ > .FBJ,
+#metadata-keywords.NO_TWJ > .TWJ,
+#metadata-keywords.NO_BACKEND > .BACKEND,
+#metadata-keywords.NO_USER > .USER,
+#metadata-keywords.NO_PICASA > .PICASA,
+#metadata-keywords.NO_FSIO > .FSIO,
+#metadata-keywords.NO_URL > .URL{
+	display: none;
+}
+
+#search-terms li{ 
+	background: none;
+	display: inline-block;
+	background-color: rgba(0, 117, 161, 0.7);/*#0075a1;*/
+	border-radius: 5px;
+	padding: 5px 10px;
+	margin: 5px;
+}
+
+li{
+	background-image: url(../images/bg_horizontal_divider.png);
+	background-repeat: repeat-x;
+	background-position: bottom;
+}
+li:last-child{
+	background-image: none;
+}
+
+li.edit-highlighted .button{
+	display: none
+}
+li.edit-highlighted > input, li > input:focus{
+	color: #000000;
+	background-color: #ffffff !important;
+	width: 90%;
+	max-width: initial;
+}
+
+li > input{
+	background-color: transparent;
+	color: white;
+	max-width: 60%;
+	font-size: 18px;
+}
+.candidates li:not(.edit-highlighted) > input{
+	color: rgb(132,132,132);
+}
+
+.faces, .keywords{
+	width: 23%;
+}
+#metadata .keywords{
+	width: 77%;
+}
+
+#edit > div{
+	float: left;
+	height: 100%;
+}
+
+#edit .center{
+	position: absolute;
+	left: 23%;
+	right: 23%;
+	text-align: center;
+	background: #242424;
+}
+
+#metadata > div{
+	float: left;
+	height: 100%;
+}
+
+#search > div{
+	float: left;
+	height: 100%;
+}
+
+#search > div > *, #edit > div > *, #metadata > div > *{
+	padding-left: 15px;
+	padding-right: 15px;
+	min-height: 60px;
+}
+
+#search .center{
+	position: absolute;
+	left: 24%;
+	right: 24%;
+}
+#search .center > *{
+	padding-left: 0px;
+	padding-right: 0px;
+	margin-bottom: 14px;
+}
+
+#search-drop-target{
+	background-color: rgba(0,0,0,0.7);
+	border-radius: 5px;
+	padding: 0px 10px;
+	width: 70%;
+	overflow-y: auto;
+	-webkit-overflow-scrolling: touch;
+	position: absolute;
+	top: 188px; /*exact :3*/
+	bottom: 20px;
+}
+
+.typical-margin > div{
+	margin-bottom: 10px;
+}
+.bottom-margin{
+	padding-bottom: 10px;
+}
+
+#div-main-search-inputfield{
+	margin-top: 20px;
+}
+#div-tag-search{
+	clear: both;
+}
+
+.float-right {
+	float: right !important;
+}
+
+.float-left {
+	float: left;
+}
+
+.no-results{
+	background: url(../images/bg_no_search_results.png) no-repeat center;
+}
+
+.error-text{
+	color: #dd6b32;
+	font-size: 0.75em;
+}
+
+.justify{
+	text-align: justify;
+	overflow: hidden;
+}
+.justifier{
+	width: 100%;
+	display: inline-block;
+	visibility: hidden;
+}
+
+.hidden{
+	display: none;
+}
+
+.inline-image{
+	height: 1em;
+}

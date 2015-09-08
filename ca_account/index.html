@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>D2I Accounts</title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />	<!-- http://www.viaboxxsystems.de/html-fullscreen-apps-for-the-ipad -->
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" /> <!-- http://www.viaboxxsystems.de/html-fullscreen-apps-for-the-ipad -->
+		<link rel="stylesheet" href="main.css" type="text/css" />
+		<script src="jquery-2.1.1.min.js"></script>
+		<script src="/ca_login/js/facebook_auth.js"></script>
+		<script src="/ca_login/js/google_auth.js"></script>
+		<script src="main.js"></script>
+	</head>
+	<body onload="onBodyLoad()">
+		<div id="login-div" class="hidden">
+			<div id="login-form"></div>
+		</div>
+		<div id="toolbar-div" class="hidden">
+			<div id="center" class="center"></div>
+			<div id="username" class="vertical-spacer"></div>
+			<div><button id="logout-btn" onclick="logout()">Logout</button></div>
+		</div>
+		<div id="content-div" class="hidden"></div>
+	</body>
+</html>
