@@ -1,5 +1,5 @@
 /**
- * Copyright 2015 Tampere University of Technology, Pori Unit
+ * Copyright 2015 Tampere University of Technology, Pori Department
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
